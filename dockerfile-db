@@ -1,0 +1,21 @@
+# Install mongodb
+
+FROM ubuntu:18.04
+
+WORKDIR /home/ubuntu
+
+ADD environment/db home/ubuntu/environment/db
+
+RUN apt-get update
+RUN apt-get install sudo -y
+RUN apt-get install gnupg2 -y
+RUN apt-get install wget -y
+RUN apt-get install dos2unix -y
+
+RUN dos2unix home/ubuntu/environment/db/provision.sh
+RUN chmod u+x home/ubuntu/environment/db/provision.sh
+RUN ./home/ubuntu/environment/db/provision.sh
+
+VOLUME ["/data/db"]
+EXPOSE 27017
+ENTRYPOINT ["/usr/bin/mongod", "--config", "/etc/mongodb.conf"]
